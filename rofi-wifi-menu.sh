@@ -9,7 +9,7 @@ LIST=$(nmcli --fields "$FIELDS" device wifi list | sed '/^--/d')
 # For some reason rofi always approximates character width 2 short... hmmm
 RWIDTH=$(($(echo "$LIST" | head -n 1 | awk '{print length($0); }')+2))
 # Gives a list of known connections so we can parse it later
-KNOWNCON=$(nmcli connection show)
+KNOWNCON=$(nmcli -g NAME connection)
 # Really janky way of telling if there is currently a connection
 CONSTATE=$(nmcli -fields WIFI g)
 
@@ -32,11 +32,11 @@ if [ "$CHSSID" = "*" ]; then
 fi
 
 # Parses the list of preconfigured connections to see if it already contains the chosen SSID. This speeds up the connection process
-if [[ $(echo "$KNOWNCON" | grep "$CHSSID") = "$CHSSID" ]]; then
-	nmcli con up "$CHSSID"
+if [[ $(echo "$KNOWNCON" | grep -w "$CHSSID") = "$CHSSID" ]]; then
+	nmcli connection up id "$CHSSID"
 else
 	if [[ "$CHENTRY" =~ "WPA2" ]] || [[ "$CHENTRY" =~ "WEP" ]]; then
 		WIFIPASS=$(echo "if connection is stored, hit enter" | rofi -dmenu -p "password: " )
 	fi
-	nmcli dev wifi con "$CHSSID" password "$WIFIPASS"
+	nmcli device wifi connect "$CHSSID" password "$WIFIPASS"
 fi
