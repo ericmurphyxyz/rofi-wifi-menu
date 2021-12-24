@@ -5,7 +5,6 @@
 
 wifi_list=$(nmcli --fields "SSID,SECURITY" device wifi list | sed '/^--/d' | sed 1d)
 # Gives a list of known connections so we can parse it later
-saved_connections=$(nmcli -g NAME connection)
 
 connected=$(nmcli -fields WIFI g)
 if [[ "$connected" =~ "enabled" ]]; then
@@ -23,11 +22,21 @@ if [ "$chosen_id" = "*" ]; then
 fi
 
 # Parses the list of preconfigured connections to see if it already contains the chosen SSID. This speeds up the connection process
-if [[ $(echo "$saved_connections" | grep -w "$chosen_id") = "$chosen_id" ]]; then
-	nmcli connection up id "$chosen_id"
+if [ "$chosen_network" = "" ]; then
+	exit
+elif [ "$chosen_network" = "Enable Wifi" ]; then
+	nmcli radio wifi on
+elif [ "$chosen_network" = "Disable Wifi" ]; then
+	nmcli radio wifi off
 else
-	if [[ "$chosen_network" =~ "WPA2" ]] || [[ "$chosen_network" =~ "WEP" ]]; then
-		wifi_password=$(echo "if connection is stored, hit enter" | rofi -dmenu -p "password: " )
+	# Get known connections
+	saved_connections=$(nmcli -g NAME connection)
+	if [[ $(echo "$saved_connections" | grep -w "$chosen_id") = "$chosen_id" ]]; then
+		nmcli connection up id "$chosen_id"
+	else
+		if [[ "$chosen_network" =~ "WPA2" ]] || [[ "$chosen_network" =~ "WEP" ]]; then
+			wifi_password=$(echo "if connection is stored, hit enter" | rofi -dmenu -p "password: " )
+		fi
+		nmcli device wifi connect "$chosen_id" password "$wifi_password"
 	fi
-	nmcli device wifi connect "$chosen_id" password "$wifi_password"
 fi
