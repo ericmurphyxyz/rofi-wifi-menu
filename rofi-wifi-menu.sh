@@ -3,24 +3,18 @@
 # Starts a scan of available broadcasting SSIDs
 # nmcli dev wifi rescan
 
-FIELDS=SSID,SECURITY
-
-LIST=$(nmcli --fields "$FIELDS" device wifi list | sed '/^--/d')
-# For some reason rofi always approximates character width 2 short... hmmm
-RWIDTH=$(($(echo "$LIST" | head -n 1 | awk '{print length($0); }')+2))
+LIST=$(nmcli --fields "SSID,SECURITY" device wifi list | sed '/^--/d' | sed 1d)
 # Gives a list of known connections so we can parse it later
 KNOWNCON=$(nmcli -g NAME connection)
-# Really janky way of telling if there is currently a connection
-CONSTATE=$(nmcli -fields WIFI g)
 
 CURRSSID=$(LANGUAGE=C nmcli -t -f active,ssid dev wifi | awk -F: '$1 ~ /^yes/ {print $2}')
 
-if [[ "$CONSTATE" =~ "enabled" ]]; then
-	TOGGLE="toggle off"
-elif [[ "$CONSTATE" =~ "disabled" ]]; then
-	TOGGLE="toggle on"
+connected=$(nmcli -fields WIFI g)
+if [[ "$connected" =~ "enabled" ]]; then
+	TOGGLE="Disable Wifi"
+elif [[ "$connected" =~ "disabled" ]]; then
+	TOGGLE="Enable Wifi"
 fi
-
 
 
 CHENTRY=$(echo -e "$TOGGLE\n$LIST" | uniq -u | rofi -dmenu -p "Wi-Fi SSID: " )
