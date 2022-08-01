@@ -27,12 +27,13 @@ else
 	success_message="You are now connected to the Wi-Fi network \"$chosen_id\"."
 	# Get saved connections
 	saved_connections=$(nmcli -g NAME connection)
-	if [[ $(echo "$saved_connections" | grep -w "$chosen_id") = "$chosen_id" ]]; then
-		nmcli connection up id "$chosen_id" | grep "successfully" && notify-send "Connection Established" "$success_message"
+	check_saved_connections=$(echo "$saved_connections" | grep -w "$chosen_id")
+	if [[ $check_saved_connections = "$chosen_id" ]]; then
+		nmcli connection up id "$chosen_id" | grep "successfully" || wifi_password=$(rofi -dmenu -p "Password: " ) && nmcli device wifi connect "$chosen_id" password "$wifi_password" | grep "successfully" && notify-send.py "Connection Established" "$success_message"
 	else
 		if [[ "$chosen_network" =~ "" ]]; then
 			wifi_password=$(rofi -dmenu -p "Password: " )
 		fi
-		nmcli device wifi connect "$chosen_id" password "$wifi_password" | grep "successfully" && notify-send "Connection Established" "$success_message"
+		nmcli device wifi connect "$chosen_id" password "$wifi_password" | grep "successfully" && notify-send "$success_message"
 	fi
 fi
