@@ -1,5 +1,5 @@
 # rofi wifi menu
- - Este fork está utilizando o (notify-send.py)[https://github.com/phuhl/notify-send.py]. Caso não o tenha instalado, troque todas as instâncias do notify-send.py por notify-send.
+ - Este fork está utilizando o [notify-send.py](https://github.com/phuhl/notify-send.py). Caso não o tenha instalado, troque todas as instâncias do notify-send.py por notify-send.
  
 A Wi-Fi menu written in bash. Uses rofi and nmcli. Forked from [zbaylin](https://github.com/zbaylin/rofi-wifi-menu) because it was unmaintained and incompatible with modern versions of rofi. Additional contributions from [vlfldr](https://github.com/vlfldr/rofi-wifi-menu)'s fork.
 
