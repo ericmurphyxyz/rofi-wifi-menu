@@ -16,11 +16,10 @@ bash "./rofi-wifi-menu.sh"
 
 You'll probably want to put the script in your `$PATH` so you can run it as a command and map a keybinding to it.
 
-## FAQ
+### Troubleshooting
 
-- PopOS! (Ubuntu-based distribution) does not have the notify-send library installed by default. You can install it with the following command (according to this [thread](https://unix.stackexchange.com/questions/685247/what-is-the-notify-send-alternative-command-in-pop-os):
+PopOS! does not have the notify-send library installed by default. You can install it with the following command (according to this [thread](https://unix.stackexchange.com/questions/685247/what-is-the-notify-send-alternative-command-in-pop-os)):
   
   ```bash
   sudo apt install libnotify-bin
-  notify-send "Yes! It works!"  
   ```
