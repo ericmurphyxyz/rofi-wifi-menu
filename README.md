@@ -18,7 +18,7 @@ You'll probably want to put the script in your `$PATH` so you can run it as a co
 
 ## FAQ
 
-- PopOS! (Ubuntu-based distribution) does not have the notify-send library installed by default. You can install it with the following command (according to this [thread]([linux - What is the notify-send alternative command in Pop! OS - Unix &amp; Linux Stack Exchange](https://unix.stackexchange.com/questions/685247/what-is-the-notify-send-alternative-command-in-pop-os))):
+- PopOS! (Ubuntu-based distribution) does not have the notify-send library installed by default. You can install it with the following command (according to this [thread](https://unix.stackexchange.com/questions/685247/what-is-the-notify-send-alternative-command-in-pop-os):
   
   ```bash
   sudo apt install libnotify-bin
